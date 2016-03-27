@@ -6,7 +6,7 @@
 
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" integrity="sha512-dTfge/zgoMYpP7QbHy4gWMEGsbsdZeCXz7irItjcC3sPUFtf0kuFbDz/ixG7ArTxmDjLXDmezHubeNikyKGVyQ==" crossorigin="anonymous">
 
-        <title>My scratchboard page</title>
+        <title>My scratchpad page</title>
     </head>
 
     <body>
@@ -26,18 +26,24 @@
 
         <div class="container">
 
-        {% for comment in comments %}
-            <div class="row">
-                {{ comment.content }}
-            </div>
-        {% endfor %}
-
         <div class="row">
             <form action="." method="POST">
+                <input name=_csrf_token type=hidden value="{{ csrf_token() }}">
                 <textarea class="form-control" name="contents" placeholder="Enter a comment"></textarea>
                 <input type="submit" value="Post comment">
             </form>
         </div>
+
+        {% for comment in comments %}
+            <div class="row" style="display:flex">
+                <form action="/delete?ID={{ comment.id }}" method="POST">
+                     <input name=_csrf_token type=hidden value="{{ csrf_token() }}">
+                     <input type="submit" value="Del">
+                    {{ comment.notedate.strftime("%x %X") }}
+                    {{ comment.content }}
+                </form>
+            </div>
+        {% endfor %}
 
         </div><!-- /.container -->
 
